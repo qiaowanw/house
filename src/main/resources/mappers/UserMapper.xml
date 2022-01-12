@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.house.mapper.UserMapper">
+  <!--  private Long id;
+    private String name;
+    private String email;
+    private String phoneNumber;
+    private String password;//pwd
+    private Integer status;
+    private LocalDateTime createTime; //DATETIME/TIMESTAMP
+    private LocalDateTime ;
+    private LocalDateTime lastUpdateTime;
+    private String avatar;
+    private List<GrantedAuthority> authorityList;-->
+    <resultMap id="userResultMap" type="com.example.house.domain.User">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="email" column="email"/>
+        <result property="phoneNumber" column="phone_number"/>
+        <result property="password" column="password"/>
+        <result property="status" column="status"/>
+        <result property="createTime" column="create_time"/>
+        <result property="lastLoginTime" column="last_login_time"/>
+        <result property="lastUpdateTime" column="last_update_time"/>
+        <result property="avatar" column="avatar"/>
+    </resultMap>
+    <sql id="userColumns">
+        id,name,email,phone_number,password,status,create_time,last_login_time,last_update_time,avatar
+    </sql>
+   <!-- int save(User user);
+    User findOne(Long id);
+    User findByName(String userName);
+    User findUserByPhoneNumber(String telephone);
+    void updateUsername(@Param("id") Long id, @Param(value = "name") String name);
+    void updateEmail(@Param("id") Long id, @Param(value = "email") String email);
+    void updatePassword(@Param("id") Long id, @Param(value = "password") String password);-->
+    <insert id="save" parameterType="com.example.house.domain.User" useGeneratedKeys="true" keyProperty="id">
+        insert into user(id,name,email,phone_number,password,status,create_time,last_login_time,last_update_time,avatar) values(#{id},#{name},#{email},#{phoneNumber},#{password},#{status},#{createTime},#{lastLoginTime},#{lastUpdateTime},#{avatar})
+    </insert>
+
+    <select id="findOne" parameterType="java.lang.Long" resultMap="userResultMap">
+        select * from user where id=#{id}
+    </select>
+
+    <select id="findByName" parameterType="java.lang.String" resultMap="userResultMap">
+        select * from user where name=#{userName}
+    </select>
+
+    <select id="findUserByPhoneNumber" parameterType="java.lang.String" resultMap="userResultMap">
+        select * from user where phone_number=#{phoneNumber}
+    </select>
+
+    <update id="updateUsername">
+        update user set name=#{name} where id=#{id}
+    </update>
+
+    <update id="updateEmail">
+        update user set email=#{email} where id=#{id}
+    </update>
+
+    <update id="updatePassword">
+        update user set password=#{password} where id=#{id}
+    </update>
+
+</mapper>
