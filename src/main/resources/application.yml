@@ -1,0 +1,6 @@
+qiniu:
+  AccessKey: nbIHi57amsp3soLvncWwo_Sv0JMJVVdW6_SLZh2j
+  SecretKey: C8UhXtZ9D2Nnc0B2NL4tNYvEZ2kEaSArHiTNqPHz
+  Bucket: celinelyle
+  cdn:
+    prefix: r5mj0bzjl.hb-bkt.clouddn.com
