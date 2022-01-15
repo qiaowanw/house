@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.house.mapper.SubwayMapper">
+    <!--   private Integer id;
+    private String name;
+    private String cityEnName;-->
+    <resultMap id="subResultMap" type="com.example.house.domain.Subway">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="cityEnName" column="city_en_name"/>
+    </resultMap>
+
+    <!--     List<Subway> findAllByCityEnName(String cityEnName);
+    Subway findOne(Long subwayId);-->
+
+    <select id="findAllByCityEnName" parameterType="java.lang.String" resultMap="subResultMap">
+        select * from subway where city_en_name=#{cityEnName}
+    </select>
+
+    <select id="findOne" parameterType="java.lang.Long" resultMap="subResultMap">
+        select * from subway where id=#{id}
+    </select>
+
+</mapper>

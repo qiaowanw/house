@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.house.mapper.SupportAddressMapper">
+    <!--  private Integer id;
+    private String belongTo;
+    private String enName;
+    private String cnName;
+    private String level;
+    private double baiduMapLng;
+    private double baiduMapLat;-->
+    <resultMap id="supportResultMap" type="com.example.house.domain.SupportAddress">
+        <id property="id" column="id"/>
+        <result property="belongTo" column="belong_to"/>
+        <result property="enName" column="en_name"/>
+        <result property="cnName" column="cn_name"/>
+        <result property="level" column="level"/>
+        <result property="baiduMapLng" column="baidu_map_lng"/>
+        <result property="baiduMapLat" column="baidu_map_lat"/>
+    </resultMap>
+
+<!--    List<SupportAddress> findAllByLevel(String level);-->
+
+    <select id="findAllByLevel" parameterType="java.lang.String" resultMap="supportResultMap">
+        select * from support_address where level=#{level}
+    </select>
+
+<!--    SupportAddress findByEnNameAndLevel(@Param("enName") String enName, @Param("level") String level);-->
+    <select id="findByEnNameAndLevel" resultMap="supportResultMap">
+        select * from support_address where level=#{level} and en_name=#{enName}
+    </select>
+<!--    SupportAddress findByEnNameAndBelongTo(@Param("enName") String enName, @Param("belongTo") String belongTo);-->
+    <select id="findByEnNameAndBelongTo" resultMap="supportResultMap">
+        select * from support_address where belong_to=#{belongTo} and en_name=#{enName}
+    </select>
+<!--    List<SupportAddress> findAllByLevelAndBelongTo(@Param("level") String level,@Param("belongTo") String belongTo);-->
+    <select id="findAllByLevelAndBelongTo" resultMap="supportResultMap">
+        select * from support_address where belong_to=#{belongTo} and level=#{level}
+    </select>
+</mapper>
