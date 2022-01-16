@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.house.mapper.HouseSubscribeMapper">
+    <!-- private Integer id;
+    private Integer houseId;
+    private Integer userId;
+    private String desc;
+    private Integer status;
+    private LocalDateTime createTime;
+    private LocalDateTime lastUpdateTime;
+    private LocalDateTime orderTime;
+    private String telephone;
+    private Integer adminId;-->
+    <resultMap id="subsResultMap" type="com.example.house.domain.HouseSubscribe">
+        <id property="id" column="id"/>
+        <result property="houseId" column="house_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="desc" column="desc"/>
+        <result property="status" column="status"/>
+        <result property="createTime" column="create_time"/>
+        <result property="lastUpdateTime" column="last_update_time"/>
+        <result property="orderTime" column="order_time"/>
+        <result property="telephone" column="telephone"/>
+        <result property="adminId" column="admin_id"/>
+    </resultMap>
+
+    <!--  HouseSubscribe findByHouseIdAndUserId(@Param("houseId") Long houseId, @Param("loginUserId") Long loginUserId);
+    List<HouseSubscribe> findAllByUserIdAndStatus(@Param("userId") Long userId, @Param("stutas") int status);
+    HouseSubscribe findByHouseIdAndAdminId(@Param("houseId") Long houseId, @Param("adminId") Long adminId);
+    void updateStatus(@Param("id") Long id, @Param("status") int status);-->
+    <select id="findByHouseIdAndUserId"  resultMap="subsResultMap">
+        select * from house_subscribe where house_id=#{houseId} and user_id=#{userId}
+    </select>
+
+    <select id="findAllByUserIdAndStatus"  resultMap="subsResultMap">
+        select * from house_subscribe where user_id=#{userId}  and status=#{status}
+    </select>
+
+    <select id="findByHouseIdAndAdminId"  resultMap="subsResultMap">
+        select * from house_subscribe where house_id=#{houseId} and admin_id=#{adminId}
+    </select>
+
+    <update id="updateStatus">
+        update house_subscribe set status=#{status} where id=#{id}
+    </update>
+
+</mapper>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.house.mapper.HousePictureMapper">
+    <!--private Long id;
+    private Long houseId;
+    private String cdnPrefix;
+    private Integer width;
+    private Integer height;
+    private String location;
+    private String path;-->
+    <resultMap id="picResultMap" type="com.example.house.domain.HousePicture">
+        <id property="id" column="id"/>
+        <result property="houseId" column="house_id"/>
+        <result property="cdnPrefix" column="cdn_prefix"/>
+        <result property="width" column="width"/>
+        <result property="height" column="height"/>
+        <result property="location" column="location"/>
+        <result property="path" column="path"/>
+    </resultMap>
+
+    <!-- List<HousePicture> findAllByHouseId(Long id);
+    int save(List<HousePicture> housePicture);
+    HousePicture findOne(Long id);
+    int delete(Long id);-->
+    <select id="findAllByHouseId" parameterType="java.lang.Long" resultMap="picResultMap">
+        select * from house_picture where house_id=#{houseId}
+    </select>
+
+    <select id="findOne" parameterType="java.lang.Long" resultMap="picResultMap">
+        select * from house_picture where id=#{id}
+    </select>
+
+    <insert id="save" parameterType="java.util.ArrayList" useGeneratedKeys="true" keyProperty="id">
+        insert into house_picture(id,house_id,cdn_prefix,width,height,location,path)
+        values
+        <foreach collection="housePicture" item="pic" index="index" separator=",">
+            ( #{pic.id},
+            #{pic.houseId},
+            #{pic.cdnPrefix},
+            #{pic.width},
+            #{pic.height},
+            #{pic.location},
+            #{pic.path}
+            )
+        </foreach>
+    </insert>
+
+    <delete id="delete" parameterType="java.lang.Long">
+        delete from house_picture where id=#{id}
+    </delete>
+</mapper>

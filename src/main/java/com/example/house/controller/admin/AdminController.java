@@ -2,25 +2,30 @@ package com.example.house.controller.admin;
 
 import com.example.house.base.ApiResponse;
 import com.example.house.base.ServiceMultiResult;
-import com.example.house.dto.QiNiuPutRet;
-import com.example.house.dto.SubwayDTO;
-import com.example.house.dto.SubwayStationDTO;
-import com.example.house.dto.SupportAddressDTO;
+import com.example.house.base.ServiceResult;
+import com.example.house.domain.SupportAddress;
+import com.example.house.dto.*;
+import com.example.house.form.HouseForm;
 import com.example.house.service.house.IAddressService;
+import com.example.house.service.house.IHouseService;
 import com.example.house.service.house.IQiNiuService;
 import com.google.gson.Gson;
 import com.qiniu.common.QiniuException;
 import com.qiniu.http.Response;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class AdminController {
@@ -30,6 +35,8 @@ public class AdminController {
     private Gson gson;
     @Autowired
     private IAddressService addressService;
+    @Autowired
+    private IHouseService houseService;
 
 //    查全部city
     @GetMapping("address/support/cities")
@@ -110,6 +117,29 @@ public class AdminController {
         } catch (IOException e) {
             return ApiResponse.ofStatus(ApiResponse.Status.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @PostMapping("admin/add/house")
+    @ResponseBody
+    public ApiResponse addHouse(@Valid @ModelAttribute("form-house-add") HouseForm houseForm, BindingResult bindingResult){
+        System.out.println(houseForm);
+        if(bindingResult.hasErrors()){
+            return new ApiResponse(HttpStatus.BAD_REQUEST.value(),bindingResult.getAllErrors().get(0).getDefaultMessage(),null);
+        }
+        if(houseForm.getPhotos()==null || houseForm.getCover()==null){
+            return ApiResponse.ofMessage(HttpStatus.BAD_REQUEST.value(), "必须上传图片");
+        }
+        Map<String, SupportAddressDTO> addressMap = addressService.findCityAndRegion(houseForm.getCityEnName(), houseForm.getRegionEnName());
+        System.out.println(addressMap.keySet().size());
+        if(addressMap.keySet().size()!=2){
+            return ApiResponse.ofStatus(ApiResponse.Status.NOT_VALID_PARAM);
+        }
+
+        ServiceResult<HouseDTO> result = houseService.save(houseForm);
+        if(result.isSuccess()){
+            return ApiResponse.ofSuccess(result.getResult());
+        }
+        return ApiResponse.ofSuccess(ApiResponse.Status.NOT_VALID_PARAM);
     }
 }
 

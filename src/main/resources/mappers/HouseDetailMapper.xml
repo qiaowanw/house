@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.house.mapper.HouseDetailMapper">
+    <!--   private Integer id;
+    private String description;
+    private String layoutDesc;
+    private String traffic;
+    private String roundService;
+    private Integer rentWay;
+    private String address;
+    private Integer subwayLineId;
+    private String subwayLineName;
+    private Integer subwayStationId;
+    private String subwayStationName;
+    private Integer houseId;-->
+    <resultMap id="detailResultMap" type="com.example.house.domain.HouseDetail">
+        <id property="id" column="id"/>
+        <result property="description" column="description"/>
+        <result property="layoutDesc" column="layout_desc"/>
+        <result property="traffic" column="traffic"/>
+        <result property="roundService" column="round_service"/>
+        <result property="rentWay" column="rent_way"/>
+        <result property="address" column="address"/>
+        <result property="subwayLineId" column="subway_line_id"/>
+        <result property="subwayLineName" column="subway_line_name"/>
+        <result property="subwayStationId" column="subway_station_id"/>
+        <result property="subwayStationName" column="subway_station_name"/>
+        <result property="houseId" column="house_id"/>
+
+    </resultMap>
+
+    <!--  HouseDetail findByHouseId(Long houseId);
+    List<HouseDetail> findAllByHouseIdIn(List<Long> houseIds);
+    void save(HouseDetail houseDetail);-->
+    <select id="findByHouseId" parameterType="java.lang.Long" resultMap="detailResultMap">
+        select * from house_detail where house_id=#{houseId}
+    </select>
+
+    <select id="findAllByHouseIdIn" parameterType="java.util.List" resultMap="detailResultMap">
+        select * from house_detail <where> house_id in
+        <foreach collection="houseIds" open="(" close=")" separator="," item="houseId" index="i">
+            (
+                #{houseId}
+            )
+        </foreach>
+    </where>
+    </select>
+
+    <insert id="save" parameterType="com.example.house.domain.HouseDetail" useGeneratedKeys="true" keyProperty="id">
+        insert into house_detail(id,description,layout_desc,traffic,round_service,
+                                 rent_way,address,subway_line_id,subway_line_name,
+                                 subway_station_id,subway_station_name,house_id)
+                                 values(#{id},#{description},#{layoutDesc},#{traffic},#{roundService},
+                                        #{rentWay},#{address},#{subwayLineId},#{subwayLineName},
+                                        #{subwayStationId},#{subwayStationName},#{houseId})
+    </insert>
+</mapper>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.house.mapper.HouseTagMapper">
+    <!--private Integer id;
+    private Integer houseId;
+    private String name;-->
+    <resultMap id="tagResultMap" type="com.example.house.domain.HouseTag">
+        <id property="id" column="id"/>
+        <result property="houseId" column="house_id"/>
+        <result property="name" column="name"/>
+    </resultMap>
+
+    <!--  HouseTag findByNameAndHouseId(@Param("name") String name, @Param("houseId") Long houseId);
+    List<HouseTag> findAllByHouseId(Long id);
+    List<HouseTag> findAllByHouseIdIn(List<Long> houseIds);
+    int save(List<HouseTag> houseTags);
+    int delete(Long id);-->
+
+
+    
+    <select id="findByNameAndHouseId"  resultMap="tagResultMap">
+        select * from house_tag where name=#{name} and house_id=#{houseId}
+    </select>
+
+    <select id="findAllByHouseId"  parameterType="java.lang.Long" resultMap="tagResultMap">
+        select * from house_tag where house_id=#{houseId}
+    </select>
+
+    <select id="findAllByHouseIdIn"  parameterType="java.util.List" resultMap="tagResultMap">
+        select * from house_tag <where> house_id in
+        <foreach collection="houseIds" open="(" close=")" separator="," item="houseId" index="i">
+            (
+            #{houseId}
+            )
+        </foreach>
+    </where> 
+    </select>
+
+    <insert id="save" parameterType="java.util.ArrayList" useGeneratedKeys="true" keyProperty="id">
+        insert into house_tag(id,house_id,name)
+        values
+            <foreach collection="houseTags" item="tag" index="index" separator=",">
+               ( #{tag.id},
+                #{tag.houseId},
+                #{tag.name}
+                )
+            </foreach>
+    </insert>
+
+    <delete id="delete" parameterType="java.lang.Long">
+        delete from house_tag where house_id=#{houseId}
+    </delete>
+</mapper>

@@ -36,6 +36,7 @@ public class AddressServiceImpl implements IAddressService {
         SupportAddress address = supportAddressMapper.findByEnNameAndBelongTo(regionEnName, cityEnName);
         Map<String, SupportAddressDTO> addressMap = new HashMap<>();
         SupportAddressDTO addressDTO = modelMapper.map(address,SupportAddressDTO.class);
+        addressMap.put(SupportAddress.Level.CITY.getValue(), addressDTO);
         addressMap.put(SupportAddress.Level.REGION.getValue(), addressDTO);
         return addressMap;
     }
