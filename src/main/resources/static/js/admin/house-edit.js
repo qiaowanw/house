@@ -2,48 +2,47 @@
  * Created by 瓦力.
  */
 $(function () {
+    // 自定义地址选择器
     var $city = $("#city"),
         $region = $("#region"),
         $subwayLine = $("#subwayLine"),
         $subwayStation = $("#subwayStation");
 
-    // $city.on('change', function () {
-    //     changeCity($city);
-    // });
+    changeCity($city);
 
-    var selectedVal = $city.val();
-    changeRegion($region, selectedVal);
-
-    // 二级联动 地区绑定
+    // 二级联动 地区 以及 地铁线路 动态变动
     $city.change(function () {
-        // var selectedVal = $(this).val();
-        // if (typeof(selectedVal) == 'undefined' || selectedVal == "") {
-        //     layer.msg('请选择所在城市！', {icon: 5, time: 2000});
-        //     return;
-        // }
+        var selectedVal = $(this).val();
+        if (typeof(selectedVal) == 'undefined' || selectedVal == "") {
+            layer.msg('请选择所在城市！', {icon: 5, time: 2000});
+            return;
+        }
 
         changeRegion($region, selectedVal);
         changeSubwayLine($subwayLine, selectedVal);
     });
 
-    // $subwayLine.on('click', function () {
-    //     var city = $city.val();
-    //     if (typeof(city) === 'undefined' || city === "") {
-    //         layer.msg('请选择所在城市！', {icon: 5, time: 2000});
-    //         return;
-    //     }
-    //     changeSubwayLine($subwayLine, $city.val());
-    // });
-
+    // 地铁站三级联动
     $subwayLine.change(function () {
         var selectedVal = $(this).val();
-        if (typeof(selectedVal) === 'undefined' || selectedVal === "") {
-            layer.msg('没选择地铁线路！', {icon: 5, time: 2000});
-
+        if (typeof(selectedVal) == 'undefined' || selectedVal == "") {
+            layer.msg('请选择地铁线路！', {icon: 5, time: 2000});
             return;
         }
 
-       changeSubwayStation($subwayStation, selectedVal);
+        changeSubwayStation($subwayStation, selectedVal);
+    });
+
+    var tags = new Set();
+    $('#tags span').on('click', function () {
+        var tag = $(this).text();
+        if (tags.has(tag)) {
+            $(this).removeClass('label-success').addClass('label-default').css('border', 'none');
+            tags.delete(tag);
+        } else {
+            $(this).removeClass('label-default').addClass('label-success').css('border', 'solid black 1px');
+            tags.add(tag);
+        }
     });
 
     $(".uploaded-list-container a").hover(function () {

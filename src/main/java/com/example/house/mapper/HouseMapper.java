@@ -1,6 +1,7 @@
 package com.example.house.mapper;
 
 import com.example.house.domain.House;
+import com.example.house.form.DatatableSearch;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -14,5 +15,5 @@ public interface HouseMapper {
     void save(House house);
     House findOne(Long id);
     List<House> findAll();
-   // List<House> findByDatatableSearch(DatatableSearch searchBody);
+    List<House> findByDatatableSearch(DatatableSearch searchBody);
 }

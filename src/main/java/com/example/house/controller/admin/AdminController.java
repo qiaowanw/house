@@ -1,10 +1,9 @@
 package com.example.house.controller.admin;
 
-import com.example.house.base.ApiResponse;
-import com.example.house.base.ServiceMultiResult;
-import com.example.house.base.ServiceResult;
+import com.example.house.base.*;
 import com.example.house.domain.SupportAddress;
 import com.example.house.dto.*;
+import com.example.house.form.DatatableSearch;
 import com.example.house.form.HouseForm;
 import com.example.house.service.house.IAddressService;
 import com.example.house.service.house.IHouseService;
@@ -129,6 +128,7 @@ public class AdminController {
         if(houseForm.getPhotos()==null || houseForm.getCover()==null){
             return ApiResponse.ofMessage(HttpStatus.BAD_REQUEST.value(), "必须上传图片");
         }
+
         Map<String, SupportAddressDTO> addressMap = addressService.findCityAndRegion(houseForm.getCityEnName(), houseForm.getRegionEnName());
         System.out.println(addressMap.keySet().size());
         if(addressMap.keySet().size()!=2){
@@ -141,5 +141,65 @@ public class AdminController {
         }
         return ApiResponse.ofSuccess(ApiResponse.Status.NOT_VALID_PARAM);
     }
+
+    @GetMapping("admin/house/list")
+    public String houseListPage() {
+        return "admin/house-list";
+    }
+
+
+
+    @PostMapping("admin/houses")
+    @ResponseBody
+    public ApiDataTableResponse houses(@ModelAttribute DatatableSearch searchBody) {
+        ServiceMultiResult<HouseDTO> result = houseService.adminQuery(searchBody);
+
+        ApiDataTableResponse response = new ApiDataTableResponse(ApiResponse.Status.SUCCESS);
+        response.setData(result.getResult());
+        response.setRecordsFiltered(result.getTotal());
+        response.setRecordsTotal(result.getTotal());
+        response.setDraw(searchBody.getDraw());
+        return response;
+    }
+
+    @PutMapping("admin/house/operate/{id}/{operation}")
+    @ResponseBody
+    public ApiResponse operateHouse(@PathVariable(value = "id") Long id,
+                                    @PathVariable(value = "operation") int operation) {
+        if (id <= 0) {
+            return ApiResponse.ofStatus(ApiResponse.Status.NOT_VALID_PARAM);
+        }
+        ServiceResult result;
+
+        switch (operation) {
+            case HouseOperation.PASS:
+                result = houseService.updateStatus(id, HouseStatus.PASSES.getValue());
+                break;
+            case HouseOperation.PULL_OUT:
+                result = houseService.updateStatus(id, HouseStatus.NOT_AUDITED.getValue());
+                break;
+            case HouseOperation.DELETE:
+                result = houseService.updateStatus(id, HouseStatus.DELETED.getValue());
+                break;
+            case HouseOperation.RENT:
+                result = houseService.updateStatus(id, HouseStatus.RENTED.getValue());
+                break;
+            default:
+                return ApiResponse.ofStatus(ApiResponse.Status.BAD_REQUEST);
+        }
+
+        if (result.isSuccess()) {
+            return ApiResponse.ofSuccess(null);
+        }
+        return ApiResponse.ofMessage(HttpStatus.BAD_REQUEST.value(),
+                result.getMessage());
+    }
+
+    @GetMapping("admin/house/edit")
+    public String houseEdit() {
+        return "admin/house-edit";
+    }
+
+
 }
 

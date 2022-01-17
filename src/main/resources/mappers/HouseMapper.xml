@@ -89,4 +89,23 @@
         select * from house
     </select>
 
+    <select id="findByDatatableSearch" parameterType="com.example.house.form.DatatableSearch" resultMap="houseResultMap">
+        select * from house
+        <where>
+            <if test="city != null">
+                and city_en_name = #{city}
+            </if>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+            <if test="createTimeMin != null">
+                and create_time > #{createTimeMin}
+            </if>
+            <if test="title != null">
+                and title > #{title}
+            </if>
+        </where>
+            order by create_time
+    </select>
+
 </mapper>

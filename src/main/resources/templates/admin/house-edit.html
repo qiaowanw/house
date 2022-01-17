@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta charset="UTF-8">
     <div th:include="admin/common :: head"></div>
     <link rel="stylesheet" type="text/css" href="/static/lib/webuploader/0.1.5/webuploader.css">
     <link rel="stylesheet" type="text/css" href="/static/css/admin/house-edit.css">
@@ -10,22 +11,20 @@
 <div>
     <content class="page-container">
         <form class="form form-horizontal" id="form-house-edit" th:object="${house}">
-            <input name="id" type="hidden" th:value="*{id}">
+            <input name="id" type="hidden" th:value="${id}">
             <div class="row cl">
                 <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>大标题：</label>
                 <div class="formControls col-xs-8 col-sm-9">
                     <input type="text" class="input-text" value="" placeholder="标题信息" id="title"
-                           name="title" th:value="*{title}">
+                           name="title" th:value="${title}">
                 </div>
             </div>
             <div class="row cl">
                 <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>市：</label>
                 <div class="formControls col-xs-8 col-sm-9">
                     <span class="select-box" style="widows: 0;">
-                        <select class="select" name="cityEnName" id="city">
-                            <option value="" th:value="${city.enName}">
-                                <span th:text="${city.cnName}"></span>
-                            </option>
+                       <select class="select" name="cityEnName" id="city">
+                            <option value="">请选择</option>
                         </select>
                     </span>
                 </div>
@@ -34,10 +33,8 @@
                 <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>区/县：</label>
                 <div class="formControls col-xs-8 col-sm-9">
                     <span class="select-box" style="widows: 0;">
-                        <select class="select" name="regionEnName" id="region">
-                            <option value="" th:value="${region.enName}">
-                                <span th:text="${region.cnName}"></span>
-                            </option>
+                         <select class="select" name="regionEnName" id="region">
+                            <option value="">请先选择所在城市</option>
                         </select>
                     </span>
                 </div>
@@ -45,13 +42,13 @@
             <div class="row cl">
                 <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>所在街道：</label>
                 <div class="formControls col-xs-8 col-sm-9">
-                    <input type="text" class="input-text" th:value="*{street}" placeholder="" id="street" name="street">
+                    <input type="text" class="input-text" th:value="${street}" placeholder="" id="street" name="street">
                 </div>
             </div>
             <div class="row cl">
                 <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>所在小区：</label>
                 <div class="formControls col-xs-8 col-sm-9">
-                    <input type="text" class="input-text" th:value="*{district}" placeholder="所在小区"
+                    <input type="text" class="input-text" th:value="${district}" placeholder="所在小区"
                            id="district" name="district">
                 </div>
             </div>
@@ -59,19 +56,19 @@
                 <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>地址：</label>
                 <div class="formControls col-xs-8 col-sm-9">
                     <input type="text" class="input-text" value="" placeholder="详细地址" id="detailAddress"
-                           name="detailAddress" th:value="*{houseDetail.address}">
+                           name="detailAddress">
                 </div>
             </div>
             <div class="row cl">
                 <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>卧室数量：</label>
                 <div class="formControls col-xs-8 col-sm-2">
-                    <input type="text" class="input-text" th:value="*{room}" placeholder="详细地址" id="room"
+                    <input type="text" class="input-text" th:value="${room}" placeholder="详细地址" id="room"
                            name="room">
                 </div>
 
                 <label class="form-label col-xs-4 col-sm-2">客厅数量：</label>
                 <div class="formControls col-xs-8 col-sm-2">
-                    <input type="text" class="input-text" th:value="*{parlour}" placeholder="详细地址" id="parlour"
+                    <input type="text" class="input-text" th:value="${parlour}" placeholder="详细地址" id="parlour"
                            name="parlour">
                 </div>
             </div>
@@ -81,11 +78,11 @@
                 <div class="formControls col-xs-8 col-sm-2">
                     <span class="select-box" style="widows: 0;">
 				        <select name="direction" class="select">
-                            <option th:selected="*{direction == 1}" value="1">朝东</option>
-                            <option th:selected="*{direction == 2}" value="2">朝南</option>
-                            <option th:selected="*{direction == 3}" value="3">朝西</option>
-                            <option th:selected="*{direction == 4}" value="4">朝北</option>
-                            <option th:selected="*{direction == 5}" value="5">南北</option>
+                            <option th:selected="${direction == 1}" value="1">朝东</option>
+                            <option th:selected="${direction == 2}" value="2">朝南</option>
+                            <option th:selected="${direction == 3}" value="3">朝西</option>
+                            <option th:selected="${direction == 4}" value="4">朝北</option>
+                            <option th:selected="${direction == 5}" value="5">南北</option>
                         </select>
 				    </span>
                 </div>
@@ -94,18 +91,18 @@
                 <div class="formControls col-xs-8 col-sm-2">
                     <input type="text"
                            onfocus="WdatePicker({ dateFmt:'yyyy',maxDate:'#F{$dp.$D(\'buildYear\')||\'%y\'}' })"
-                           id="buildYear" name="buildYear" class="input-text Wdate" th:value="*{buildYear}">
+                           id="buildYear" name="buildYear" class="input-text Wdate" th:value="${buildYear}">
                 </div>
             </div>
             <div class="row cl">
                 <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>所在楼层：</label>
                 <div class="formControls col-xs-8 col-sm-2">
-                    <input type="text" class="input-text" th:value="*{floor}" placeholder="所在楼层" id="floor"
+                    <input type="text" class="input-text" th:value="${floor}" placeholder="所在楼层" id="floor"
                            name="floor">
                 </div>
                 <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>总楼层：</label>
                 <div class="formControls col-xs-8 col-sm-2">
-                    <input type="text" class="input-text" th:value="*{totalFloor}" placeholder="总楼层" id="totalFloor"
+                    <input type="text" class="input-text" th:value="${totalFloor}" placeholder="总楼层" id="totalFloor"
                            name="totalFloor">
                 </div>
             </div>
@@ -113,19 +110,19 @@
                 <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>面积：</label>
                 <div class="formControls col-xs-8 col-sm-2">
                     <input type="text" class="input-text" value="0" placeholder="" id="area" name="area"
-                           th:value="*{area}">
+                           th:value="${area}">
                 </div>
                 <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>定价：</label>
                 <div class="formControls col-xs-8 col-sm-2">
                     <input type="text" class="input-text" value="0" placeholder="" id="price" name="price"
-                           th:value="*{price}">
+                           th:value="${price}">
                 </div>
             </div>
             <div class="row cl">
                 <label class="form-label col-xs-4 col-sm-2">租赁方式：</label>
                 <div class="formControls col-xs-8 col-sm-2">
                     <span class="select-box" style="widows: 0;">
-				        <select name="rentWay" class="select" th:selected="*{houseDetail.rentWay}">
+				        <select name="rentWay" class="select" th:selected="#{houseDetail.rentWay}">
                             <option value="0">整租</option>
                             <option value="1">合租</option>
                         </select>
@@ -156,7 +153,7 @@
                 <label class="form-label col-xs-4 col-sm-2">距地铁距离：</label>
                 <div class="formControls col-xs-8 col-sm-2">
                     <input type="text" class="input-text" value="-1" placeholder="" id="distanceToSubway"
-                           name="distanceToSubway" th:value="${house.distanceToSubway}">
+                           name="distanceToSubway" >
                 </div>
             </div>
             <div class="row cl">
@@ -175,21 +172,21 @@
                 <label class="form-label col-xs-4 col-sm-2">户型介绍：</label>
                 <div class="formControls col-xs-8 col-sm-9">
                     <input type="text" class="input-text" value="" placeholder="房屋整体户型的相关介绍"
-                           id="layoutDesc" name="layoutDesc" th:value="*{houseDetail.layoutDesc}">
+                           id="layoutDesc" name="layoutDesc" >
                 </div>
             </div>
             <div class="row cl">
                 <label class="form-label col-xs-4 col-sm-2">交通出行：</label>
                 <div class="formControls col-xs-8 col-sm-9">
                     <input type="text" class="input-text" value="" placeholder="周边的交通设施"
-                           id="traffic" name="traffic" th:value="*{houseDetail.traffic}">
+                           id="traffic" name="traffic" >
                 </div>
             </div>
             <div class="row cl">
                 <label class="form-label col-xs-4 col-sm-2">周边配套：</label>
                 <div class="formControls col-xs-8 col-sm-9">
                     <input type="text" class="input-text" value="" placeholder="周边的服务配套设施，如学校、医院等"
-                           id="roundService" name="roundService" th:value="*{houseDetail.roundService}">
+                           id="roundService" name="roundService" >
                 </div>
             </div>
 
@@ -198,22 +195,24 @@
                 <div class="formControls col-xs-8 col-sm-9">
                 <textarea name="description" cols="" rows="" class="textarea" placeholder="说点什么..."
                           datatype="*10-100" dragonfly="true" nullmsg="备注不能为空！"
-                          th:text="*{houseDetail.description}"></textarea>
+                          ></textarea>
                     <p class="textarea-numberbar"><em class="textarea-length">0</em>/200</p>
                 </div>
             </div>
 
-            <div class="row cl">
-                <label class="form-label col-xs-4 col-sm-2" style="width: 18%">已上传图片：</label>
-                <div class="uploaded-list-container ">
-                    <tr th:each="picture: ${house.pictures}">
-                        <a th:href="${picture.cdnPrefix} + ${picture.path}">
-                            <img th:src="${picture.cdnPrefix} + ${picture.path}" width="150" height="100">
-                            <input type="hidden" th:value="${picture.id}">
-                        </a>
-                    </tr>
-                </div>
-            </div>
+<!--            <div class="row cl">-->
+<!--                <label class="form-label col-xs-4 col-sm-2" style="width: 18%">已上传图片：</label>-->
+<!--                <div class="uploaded-list-container ">-->
+<!--                    <table border="1px">-->
+<!--                    <tr th:each="picture: ${house.pictures}">-->
+<!--                        <a th:href="${picture.cdnPrefix} + ${picture.path}">-->
+<!--                            <img th:src="${picture.cdnPrefix} + ${picture.path}" width="150" height="100">-->
+<!--                            <input type="hidden" th:value="${picture.id}">-->
+<!--                        </a>-->
+<!--                    </tr>-->
+<!--                    </table>-->
+<!--                </div>-->
+<!--            </div>-->
 
             <div class="uploader-list-container" style=" width: 60%; height: 30%; position: relative;
                 margin-left:17%;">
@@ -273,7 +272,7 @@
 <script type="text/javascript" src="/static/js/admin/house-common.js"></script>
 <script type="text/javascript" src="/static/js/admin/house-edit.js"></script>
 <script th:inline="javascript">
-    var tags = [[${house.tags}]];
+    var tags = [${house.tags}];
     var tagSpans = $('#tags span');
     tagSpans.each(function () {
         var val = $(this).text();
@@ -286,7 +285,7 @@
         var tagSpan = $(this);
         if ($(this).hasClass('label-success')) {
             $.ajax({
-                url: '/admin/house/tag?house_id=' + [[${house.id}]] + '&tag=' + $(this).text(),
+                url: '/admin/house/tag?house_id=' + [${house.id}] + '&tag=' + $(this).text(),
                 type: 'DELETE',
                 success: function (data) {
                     if (data.code === 200) {
@@ -305,7 +304,7 @@
                 url: '/admin/house/tag',
                 type: 'POST',
                 data: {
-                    'house_id': [[${house.id}]],
+                    'house_id': [${house.id}],
                     'tag': $(this).text()
                 },
                 success: function (data) {
