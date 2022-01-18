@@ -68,4 +68,9 @@ class HouseServiceImplTest {
         houseForm.setPhotos(photos);
         System.out.println(houseService.save(houseForm).getResult());
     }
+
+    @Test
+    void findOne(){
+        System.out.println(houseService.findCompleteOne(26L));
+    }
 }

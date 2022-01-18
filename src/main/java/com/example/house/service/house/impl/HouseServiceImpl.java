@@ -11,6 +11,7 @@ import com.example.house.dto.QiNiuPutRet;
 import com.example.house.form.DatatableSearch;
 import com.example.house.form.HouseForm;
 import com.example.house.form.PhotoForm;
+import com.example.house.form.RentSearch;
 import com.example.house.mapper.*;
 import com.example.house.service.house.IHouseService;
 import com.example.house.service.house.IQiNiuService;
@@ -253,6 +254,25 @@ public class HouseServiceImpl implements IHouseService {
             houseDTOS.add(houseDTO);
         });
         return new ServiceMultiResult<>(houses.size(),houseDTOS);
+    }
+
+    @Override
+    public ServiceMultiResult<HouseDTO> query(RentSearch rentSearch) {
+        List<HouseDTO> houseDTOS = new ArrayList<>();
+//        Sort sort = Sort.by(Sort.Direction.fromString(searchBody.getDirection()), searchBody.getOrderBy());
+//        int page = searchBody.getStart() / searchBody.getLength();
+//        Pageable pageable = PageRequest.of(page, searchBody.getLength(), sort);
+        List<House> houses = houseMapper.findAll();
+
+        houses.forEach(house -> {
+            HouseDTO houseDTO = modelMapper.map(house, HouseDTO.class);
+            houseDTO.setCover(this.cdnPrefix + "/"+house.getCover());
+            HouseDetailDTO houseDetailDTO = modelMapper.map(houseDetailMapper.findByHouseId(house.getId()), HouseDetailDTO.class);
+            houseDTO.setHouseDetail(houseDetailDTO);
+            houseDTOS.add(houseDTO);
+        });
+
+        return new ServiceMultiResult<>(houses.size(), houseDTOS);
     }
 
     private List<HousePicture> generatePictures(HouseForm houseForm, Long houseId){

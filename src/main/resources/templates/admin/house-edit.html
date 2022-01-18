@@ -11,12 +11,12 @@
 <div>
     <content class="page-container">
         <form class="form form-horizontal" id="form-house-edit" th:object="${house}">
-            <input name="id" type="hidden" th:value="${id}">
+            <input name="id" type="hidden" th:value="#{id}">
             <div class="row cl">
                 <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>大标题：</label>
                 <div class="formControls col-xs-8 col-sm-9">
                     <input type="text" class="input-text" value="" placeholder="标题信息" id="title"
-                           name="title" th:value="${title}">
+                           name="title">
                 </div>
             </div>
             <div class="row cl">
@@ -195,24 +195,24 @@
                 <div class="formControls col-xs-8 col-sm-9">
                 <textarea name="description" cols="" rows="" class="textarea" placeholder="说点什么..."
                           datatype="*10-100" dragonfly="true" nullmsg="备注不能为空！"
-                          ></textarea>
+                ></textarea>
                     <p class="textarea-numberbar"><em class="textarea-length">0</em>/200</p>
                 </div>
             </div>
 
-<!--            <div class="row cl">-->
-<!--                <label class="form-label col-xs-4 col-sm-2" style="width: 18%">已上传图片：</label>-->
-<!--                <div class="uploaded-list-container ">-->
-<!--                    <table border="1px">-->
-<!--                    <tr th:each="picture: ${house.pictures}">-->
-<!--                        <a th:href="${picture.cdnPrefix} + ${picture.path}">-->
-<!--                            <img th:src="${picture.cdnPrefix} + ${picture.path}" width="150" height="100">-->
-<!--                            <input type="hidden" th:value="${picture.id}">-->
-<!--                        </a>-->
-<!--                    </tr>-->
-<!--                    </table>-->
-<!--                </div>-->
-<!--            </div>-->
+            <!--            <div class="row cl">-->
+            <!--                <label class="form-label col-xs-4 col-sm-2" style="width: 18%">已上传图片：</label>-->
+            <!--                <div class="uploaded-list-container ">-->
+            <!--                    <table border="1px">-->
+            <!--                    <tr th:each="picture: ${house.pictures}">-->
+            <!--                        <a th:href="${picture.cdnPrefix} + ${picture.path}">-->
+            <!--                            <img th:src="${picture.cdnPrefix} + ${picture.path}" width="150" height="100">-->
+            <!--                            <input type="hidden" th:value="${picture.id}">-->
+            <!--                        </a>-->
+            <!--                    </tr>-->
+            <!--                    </table>-->
+            <!--                </div>-->
+            <!--            </div>-->
 
             <div class="uploader-list-container" style=" width: 60%; height: 30%; position: relative;
                 margin-left:17%;">

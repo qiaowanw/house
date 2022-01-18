@@ -32,12 +32,12 @@ public class AddressServiceImpl implements IAddressService {
     private ModelMapper modelMapper;
 
     @Override
-    public Map<String, SupportAddressDTO> findCityAndRegion(String cityEnName, String regionEnName) {
+    public Map<SupportAddress.Level, SupportAddressDTO> findCityAndRegion(String cityEnName, String regionEnName) {
         SupportAddress address = supportAddressMapper.findByEnNameAndBelongTo(regionEnName, cityEnName);
-        Map<String, SupportAddressDTO> addressMap = new HashMap<>();
+        Map<SupportAddress.Level, SupportAddressDTO> addressMap = new HashMap<>();
         SupportAddressDTO addressDTO = modelMapper.map(address,SupportAddressDTO.class);
-        addressMap.put(SupportAddress.Level.CITY.getValue(), addressDTO);
-        addressMap.put(SupportAddress.Level.REGION.getValue(), addressDTO);
+        addressMap.put(SupportAddress.Level.CITY, addressDTO);
+        addressMap.put(SupportAddress.Level.REGION, addressDTO);
         return addressMap;
     }
 

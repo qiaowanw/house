@@ -5,6 +5,7 @@ import com.example.house.base.ServiceResult;
 import com.example.house.dto.HouseDTO;
 import com.example.house.form.DatatableSearch;
 import com.example.house.form.HouseForm;
+import com.example.house.form.RentSearch;
 
 public interface IHouseService {
     ServiceResult<HouseDTO> save(HouseForm houseForm);
@@ -24,5 +25,7 @@ public interface IHouseService {
     ServiceResult updateCover(Long coverId, Long targetId);
 
     ServiceMultiResult<HouseDTO> adminQuery(DatatableSearch searchBody);
+
+    ServiceMultiResult<HouseDTO> query(RentSearch rentSearch);
 
 }

@@ -1,6 +1,7 @@
 package com.example.house.service.house;
 
 import com.example.house.base.ServiceMultiResult;
+import com.example.house.domain.SupportAddress;
 import com.example.house.dto.SubwayDTO;
 import com.example.house.dto.SubwayStationDTO;
 import com.example.house.dto.SupportAddressDTO;
@@ -10,7 +11,7 @@ import java.util.Map;
 
 public interface IAddressService {
     //根据市、区获取具体区域信息
-    Map<String, SupportAddressDTO> findCityAndRegion(String cityEnName, String regionEnName);
+    Map<SupportAddress.Level, SupportAddressDTO> findCityAndRegion(String cityEnName, String regionEnName);
 
     //查看所有城市信息（得到city/address/Dto)
     ServiceMultiResult<SupportAddressDTO> findAllCities();
