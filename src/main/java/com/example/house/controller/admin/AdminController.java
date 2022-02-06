@@ -154,7 +154,6 @@ public class AdminController {
     @ResponseBody
     public ApiDataTableResponse houses(@ModelAttribute DatatableSearch searchBody) {
         ServiceMultiResult<HouseDTO> result = houseService.adminQuery(searchBody);
-
         ApiDataTableResponse response = new ApiDataTableResponse(ApiResponse.Status.SUCCESS);
         response.setData(result.getResult());
         response.setRecordsFiltered(result.getTotal());
@@ -202,12 +201,12 @@ public class AdminController {
     }
 
     @GetMapping("admin/house/edit/{id}")
-    public String edit(@PathVariable(value = "id") Long houseId, Model model){
-        if (houseId <= 0) {
+    public String edit(@PathVariable(value = "id") Long id, Model model){
+        if (id <= 0) {
             return "404";
         }
 
-        ServiceResult<HouseDTO> serviceResult = houseService.findCompleteOne(houseId);
+        ServiceResult<HouseDTO> serviceResult = houseService.findCompleteOne(id);
         if (!serviceResult.isSuccess()) {
             return "404";
         }

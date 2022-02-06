@@ -5,6 +5,7 @@ import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Data
 @AllArgsConstructor
@@ -18,7 +19,9 @@ public class DatatableSearch {
     private int length;
 
     private Integer status;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate createTimeMin;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate createTimeMax;
     private String city;
     private String title;

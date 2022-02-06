@@ -2,7 +2,9 @@ package com.example.house.base;
 
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 public class ApiDataTableResponse extends ApiResponse {
     private int draw;
