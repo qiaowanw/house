@@ -8,6 +8,7 @@ import com.example.house.form.HouseForm;
 import com.example.house.service.house.IAddressService;
 import com.example.house.service.house.IHouseService;
 import com.example.house.service.house.IQiNiuService;
+import com.example.house.service.search.ISearchService;
 import com.google.gson.Gson;
 import com.qiniu.common.QiniuException;
 import com.qiniu.http.Response;
@@ -20,7 +21,9 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.io.InputStream;
@@ -37,6 +40,8 @@ public class AdminController {
     private IAddressService addressService;
     @Autowired
     private IHouseService houseService;
+    @Autowired
+    private ISearchService searchService;
 
 //    查全部city
     @GetMapping("address/support/cities")
@@ -225,6 +230,27 @@ public class AdminController {
         return "house-edit";
     }
 
+    @GetMapping("rent/house/map")
+    public String rentMapPage(@RequestParam(value = "cityEnName") String cityEnName,
+                              Model model,
+                              HttpSession session,
+                              RedirectAttributes redirectAttributes) {
+        ServiceResult<SupportAddressDTO> city = addressService.findCity(cityEnName);
+        if (!city.isSuccess()) {
+            redirectAttributes.addAttribute("msg", "must_chose_city");
+            return "redirect:/index";
+        } else {
+            session.setAttribute("cityName", cityEnName);
+            model.addAttribute("city", city.getResult());
+        }
 
+        ServiceMultiResult<SupportAddressDTO> regions = addressService.findAllRegionsByCityName(cityEnName);
+
+        ServiceMultiResult<HouseBucketDTO> serviceResult = searchService.mapAggregate(cityEnName);
+        model.addAttribute("aggData", serviceResult.getResult());
+        model.addAttribute("total", serviceResult.getTotal());
+        model.addAttribute("regions", regions.getResult());
+        return "rent-map";
+    }
 }
 

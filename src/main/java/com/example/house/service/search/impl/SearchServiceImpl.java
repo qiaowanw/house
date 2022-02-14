@@ -10,6 +10,7 @@ import com.example.house.base.ServiceResult;
 import com.example.house.domain.House;
 import com.example.house.domain.HouseDetail;
 import com.example.house.domain.HouseTag;
+import com.example.house.dto.HouseBucketDTO;
 import com.example.house.form.RentSearch;
 import com.example.house.mapper.HouseDetailMapper;
 import com.example.house.mapper.HouseMapper;
@@ -44,6 +45,7 @@ import org.elasticsearch.index.reindex.BulkByScrollResponse;
 import org.elasticsearch.index.reindex.DeleteByQueryRequest;
 import org.elasticsearch.rest.RestStatus;
 import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.search.aggregations.AggregationBuilder;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
@@ -256,5 +258,40 @@ public class SearchServiceImpl implements ISearchService {
     @Override
     public ServiceMultiResult<Long> query(RentSearch rentSearch) {
         return null;
+    }
+
+    @Override
+    public ServiceMultiResult<HouseBucketDTO> mapAggregate(String cityEnName) {
+        BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
+        boolQuery.filter(QueryBuilders.termQuery(HouseIndexKey.CITY_EN_NAME, cityEnName));
+
+        AggregationBuilder aggBuilder = AggregationBuilders.terms(HouseIndexKey.AGG_REGION)
+                .field(HouseIndexKey.REGION_EN_NAME); //group by
+
+        SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
+        sourceBuilder.query(boolQuery);//select cityEnName from xxx group by region=bj
+        sourceBuilder.aggregation(aggBuilder);
+
+        SearchRequest searchRequest = new SearchRequest(INDEX_NAME);
+        searchRequest.source(sourceBuilder);
+
+        SearchResponse searchResponse = null;
+        try {
+            searchResponse = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        List<HouseBucketDTO> buckets = new ArrayList<>();
+        if (searchResponse.status() != RestStatus.OK) {
+            logger.warn("Aggregate status is not ok for " + searchRequest);
+            return new ServiceMultiResult<>(0, buckets);
+        }
+
+        Terms terms = searchResponse.getAggregations().get(HouseIndexKey.AGG_REGION);
+        for (Terms.Bucket bucket : terms.getBuckets()) {
+            buckets.add(new HouseBucketDTO(bucket.getKeyAsString(), bucket.getDocCount()));
+        }
+
+        return new ServiceMultiResult<>(searchResponse.getHits().getTotalHits().value, buckets);
     }
 }

@@ -1,6 +1,7 @@
 package com.example.house.service.house;
 
 import com.example.house.base.ServiceMultiResult;
+import com.example.house.base.ServiceResult;
 import com.example.house.domain.SupportAddress;
 import com.example.house.dto.SubwayDTO;
 import com.example.house.dto.SubwayStationDTO;
@@ -26,4 +27,6 @@ public interface IAddressService {
 
    // 根据地铁线路的名字获得所有地铁站的信息
     List<SubwayStationDTO> findAllStationBySubway(Long subwayId);
+
+    ServiceResult<SupportAddressDTO> findCity(String cityEnName);
 }

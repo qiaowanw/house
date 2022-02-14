@@ -1,6 +1,7 @@
 package com.example.house.service.house.impl;
 
 import com.example.house.base.ServiceMultiResult;
+import com.example.house.base.ServiceResult;
 import com.example.house.domain.Subway;
 import com.example.house.domain.SubwayStation;
 import com.example.house.domain.SupportAddress;
@@ -91,5 +92,20 @@ public class AddressServiceImpl implements IAddressService {
             result.add(subwayStationDTO);
         }
         return result;
+    }
+
+    @Override
+    public ServiceResult<SupportAddressDTO> findCity(String cityEnName) {
+        if (cityEnName == null) {
+            return ServiceResult.notFound();
+        }
+
+        SupportAddress supportAddress = supportAddressMapper.findByEnNameAndLevel(cityEnName, SupportAddress.Level.CITY.getValue());
+        if (supportAddress == null) {
+            return ServiceResult.notFound();
+        }
+
+        SupportAddressDTO addressDTO = modelMapper.map(supportAddress, SupportAddressDTO.class);
+        return ServiceResult.of(addressDTO);
     }
 }

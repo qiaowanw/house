@@ -11,12 +11,12 @@ var regionCountMap = {}, // 地区数据
 
 function load(city, regions, aggData) {
     // 百度地图API功能
-    var map = new BMap.Map("allmap", {minZoom: 12}); // 创建实例。设置地图显示最大级别为城市
-    var point = new BMap.Point(city.baiduMapLongitude, city.baiduMapLatitude); // 城市中心
+    var map = new BMapGL.Map("allmap", {minZoom: 12}); // 创建实例。设置地图显示最大级别为城市
+    var point = new BMapGL.Point(city.baiduMapLongitude, city.baiduMapLatitude); // 城市中心
     map.centerAndZoom(point, 12); // 初始化地图，设置中心点坐标及地图级别
 
-    map.addControl(new BMap.NavigationControl({enableGeolocation: true})); // 添加比例尺控件
-    map.addControl(new BMap.ScaleControl({anchor: BMAP_ANCHOR_TOP_LEFT})); // 左上角
+    map.addControl(new BMapGL.NavigationControl({enableGeolocation: true})); // 添加比例尺控件
+    map.addControl(new BMapGL.ScaleControl({anchor: BMAP_ANCHOR_TOP_LEFT})); // 左上角
     map.enableScrollWheelZoom(true); // 开启鼠标滚轮缩放
 
     for (var i = 0; i < aggData.length; i++) {
@@ -43,13 +43,13 @@ function load(city, regions, aggData) {
  * @param regionList
  */
 function drawRegion(map, regionList) {
-    var boundary = new BMap.Boundary();
+    var boundary = new BMapGL.Boundary();
     var polygonContext = {};
     var regionPoint;
     var textLabel;
     for (var i = 0; i < regionList.length; i++) {
 
-        regionPoint = new BMap.Point(regionList[i].baiduMapLongitude, regionList[i].baiduMapLatitude);
+        regionPoint = new BMapGL.Point(regionList[i].baiduMapLongitude, regionList[i].baiduMapLatitude);
 
         var houseCount = 0;
         if (regionList[i].en_name in regionCountMap) {
@@ -59,9 +59,9 @@ function drawRegion(map, regionList) {
         var textContent = '<p style="margin-top: 20px; pointer-events: none">' +
             regionList[i].cn_name + '</p>' + '<p style="pointer-events: none">' +
             houseCount + '套</p>';
-        textLabel = new BMap.Label(textContent, {
+        textLabel = new BMapGL.Label(textContent, {
             position: regionPoint, // 标签位置
-            offset: new BMap.Size(-40, 20) // 文本偏移量
+            offset: new BMapGL.Size(-40, 20) // 文本偏移量
         });
 
         textLabel.setStyle({
@@ -95,7 +95,7 @@ function drawRegion(map, regionList) {
 
                 for (var j = 0; j < count; j++) {
                     // 建立多边形覆盖物
-                    var polygon = new BMap.Polygon(
+                    var polygon = new BMapGL.Polygon(
                         rs.boundaries[j],
                         {
                             strokeWeight: 2,
@@ -140,7 +140,7 @@ function drawRegion(map, regionList) {
     }
 
     if (!customLayer) {
-        customLayer = new BMap.CustomLayer({
+        customLayer = new BMapGL.CustomLayer({
             geotableId: 175730,
             q: '', // 检索关键字
             tags: '', // 空格分隔的字符串
@@ -167,12 +167,12 @@ function drawRegion(map, regionList) {
         };
 
         // 创建信息窗口对象
-        var infoWindow = new BMap.InfoWindow("位置：" + contentPoi.address, opts);
-        var point = new BMap.Point(customPoi.point.lng, customPoi.point.lat);
+        var infoWindow = new BMapGL.InfoWindow("位置：" + contentPoi.address, opts);
+        var point = new BMapGL.Point(customPoi.point.lng, customPoi.point.lat);
 
         // 搜索信息提示框
         var searchInfoWindow = new BMapLib.SearchInfoWindow(map, content, {
-           title: customPoi.title, // 标题
+            title: customPoi.title, // 标题
             width: 290,
             height: 60,
             panel: "panel", // 搜索结果面板
@@ -185,7 +185,7 @@ function drawRegion(map, regionList) {
             ]
         });
 
-        var marker = new BMap.Marker(point); // 创建marker标注
+        var marker = new BMapGL.Marker(point); // 创建marker标注
         marker.addEventListener("click", function (e) { // 点击去除
             map.removeOverlay(e.target);
         });
